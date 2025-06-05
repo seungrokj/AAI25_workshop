@@ -23,5 +23,5 @@
 
 ## ⭐
 ![DO_5](./assets/DO_5.jpg)
-- Open a terminal and access the instance IP alogn with PORTs to connect to the instance
+- Open a terminal and access the instance IP along with PORTs to connect to the instance
 - Check out GPU status
