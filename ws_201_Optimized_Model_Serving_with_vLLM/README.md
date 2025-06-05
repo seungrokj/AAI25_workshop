@@ -1,8 +1,3 @@
- - TODOs: 
- * 1. Change host server IP
- * 2. Change the vLLM docker image if needed
- * 3. Change model downloaded location
-
 # Table of content
 
 0. [BEFORE WE BEGIN](#before-we-begin)
@@ -16,44 +11,18 @@ In this workshop, we will run three vLLM servers and compare the caracteristics 
 
 ![WORKSHOP_DESC](./assets/LLM_ws_201.jpg)
 
-Each person will receive 1) a host machine ssh IP, 2) GPU Device ID in the host machine (HIP_VISIBLE_DEVICES), 3) vLLM server PORT, 4) Jupyter notebook PORT
+## Connecting to Digital Ocean Cloud Instance
 
------------------------------
-📌 For example, 
+ - 📌 IMPORTANT: Check out Digital Ocean Cloud Quick Start Guide at [digital ocean quick start](../Digital_Ocean_Usage/README.md)
 
-| Person ID    | Host machine ssh IP | GPU Device ID         | vLLM server PORT | Jupyter NB PORT |
-| ------------ | --------------------|-----------------------|------------------|-----------------|
-| 0            | amd@64.139.222.215  | HIP_VISIBLE_DEVICES=0 | 8100             | 7100            |
-| 1            | amd@64.139.222.215  | HIP_VISIBLE_DEVICES=1 | 8101             | 7101            |
-| 2            | amd@64.139.222.215  | HIP_VISIBLE_DEVICES=2 | 8102             | 7102            |
-| 8            | amd@64.139.222.216  | HIP_VISIBLE_DEVICES=0 | 8108             | 7108            |
-| 9            | amd@64.139.222.216  | HIP_VISIBLE_DEVICES=1 | 8109             | 7109            |
-
-## Connecting to AMD host machines through SSH using any terminal applications
-
- - IMPORTANT: Replace a specific vLLM PORT `<81xx>`, JUPYTER NOTEBOOK PORT `<71xx>`, GPU ID <x>, and HOST MACHINE IP <host machine IP> according to your Personal ID. 
-
-
-### 📌 Please change according to your assigned ports, gpus, and hosts machine
-```
-ssh -L <71xx>:localhost:<71xx> -L <81xx>:localhost:<81xx> <host machine IP>
-
-# Inside the host machine
-export PORT_VLLM=<81xx>
-export PORT_JUPYTER=<71xx>
-export GPU_ID=<x>
-export model=/models/Llama-3.1-8B-Instruct
-```
-
-### For example, if you are using vLLM PORT `<8100>`, JUPYTER NOTEBOOK PORT `<7100>`, GPU ID <0>, and HOST MACHINE IP <amd@64.139.222.215> according to your Personal ID. 
+### Please use these to connect to your instace
 
 ```
-ssh -L 7100:localhost:7100 -L 8100:localhost:8100 amd@64.139.222.215
+ssh -L 7100:localhost:7100 -L 8100:localhost:8100 root@DIGITAL_OCEAN_INSTANCE_IP
 
 # Inside the host machine
 export PORT_VLLM=8100
 export PORT_JUPYTER=7100
-export GPU_ID=0
 export model=/models/Llama-3.1-8B-Instruct
 ```
 
@@ -61,30 +30,11 @@ export model=/models/Llama-3.1-8B-Instruct
 ## Case 1 vLLM v0 benchmarks
 -----------------------------
 
-Check the GPU availability by `rocm-smi`
+Please down load LLAMA3.1 8B model from [RedHatAI/Llama-3.1-8B-Instruct](https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct) at ./models
 
 ```
-================================================== ROCm System Management Interface ==================================================
-============================================================ Concise Info ============================================================
-Device  Node  IDs              Temp        Power     Partitions          SCLK    MCLK    Fan  Perf              PwrCap  VRAM%  GPU%
-              (DID,     GUID)  (Junction)  (Socket)  (Mem, Compute, ID)
-======================================================================================================================================
-0       2     0x74a1,   28851  36.0°C      144.0W    NPS1, SPX, 0        122Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-1       3     0x74a1,   51499  35.0°C      141.0W    NPS1, SPX, 0        121Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-2       4     0x74a1,   57603  37.0°C      146.0W    NPS1, SPX, 0        121Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-3       5     0x74a1,   22683  33.0°C      140.0W    NPS1, SPX, 0        122Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-4       6     0x74a1,   53458  35.0°C      141.0W    NPS1, SPX, 0        121Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-5       7     0x74a1,   26954  34.0°C      141.0W    NPS1, SPX, 0        121Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-6       8     0x74a1,   16738  35.0°C      142.0W    NPS1, SPX, 0        125Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-7       9     0x74a1,   63738  32.0°C      143.0W    NPS1, SPX, 0        147Mhz  900Mhz  0%   perf_determinism  750.0W  0%     0%
-======================================================================================================================================
-======================================================== End of ROCm SMI Log =========================================================
-```
-
-(We downloaded the model, but in case the model is not found) Download target model [RedHatAI/Llama-3.1-8B-Instruct](https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct) at /home/amd/models
-
-```
-cd /home/amd/models
+mkdir models
+cd models
 git-lfs clone https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct
 ```
 
@@ -98,9 +48,8 @@ docker run -it --rm --network=host \
     --cap-add=SYS_PTRACE \
     --security-opt seccomp=unconfined \
     -e VLLM_USE_V1=0 \
-    -e HIP_VISIBLE_DEVICES=$GPU_ID \
     -e VLLM_USE_TRITON_FLASH_ATTN=0 \
-    -v /home/amd/models:/models  -v /home/amd/datasets:/datasets \
+    -v ./models:/models \
     rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
     vllm serve $model \
             --disable-log-requests \
@@ -120,31 +69,15 @@ INFO:     Application startup complete.
 
 ### CLIENT) Launch Jupyternotebook servers on the AMD host machine
 
-Server. Jupyter notebook, running at a port: <71xx>, for example, 7100
-
 In an other terminal, now ssh again into the AMD host machine 
 
-#### Once again, please change according to your assigned ports, gpus, and hosts machine
 ```
-ssh -L <71xx>:localhost:<71xx> -L <81xx>:localhost:<81xx> <host machine IP>
-
-# Inside the host machine
-export PORT_VLLM=<81xx>
-export PORT_JUPYTER=<71xx>
-export GPU_ID=<x>
-export model=/models/Llama-3.1-8B-Instruct
-```
-
-#### For example, if you are using vLLM PORT `<8100>`, JUPYTER NOTEBOOK PORT `<7100>`, GPU ID <0>, and HOST MACHINE IP <amd@64.139.222.215> according to your Personal ID. 
-
-```
-ssh -L 7100:localhost:7100 -L 8100:localhost:8100 amd@64.139.222.215
+ssh -L 7100:localhost:7100 -L 8100:localhost:8100 root@DIGITAL_OCEAN_INSTANCE_IP
 
 # Inside the host machine
 export PORT_VLLM=8100
-export GPU_ID=0
-export model=/models/Llama-3.1-8B-Instruct
 export PORT_JUPYTER=7100
+export model=/models/Llama-3.1-8B-Instruct
 ```
 
 #### Launch Jupyter notebook container and access it via a web browser
@@ -164,7 +97,7 @@ Inside the container, please clone this workshop repo
 apt update
 apt install git -y
 cd /workspace
-git clone https://github.com/ROCm/aai25_workshop.git
+git clone https://github.com/seungrokj/AAI25_workshop
 cd aai25_workshop/ws_201_Optimized_Model_Serving_with_vLLM
 ```
 
@@ -174,18 +107,14 @@ Launch the Jupyter notebook
 jupyter-notebook --allow-root --port $PORT_JUPYTER
 ```
 
-You can access the Jupyter notebook server that starts with http:/127.0.0.1:<71xx> below
+You can access the Jupyter notebook server that starts with http:/127.0.0.1:<7100> below
 
 ```
-[I 2025-06-02 15:00:13.584 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
-[C 2025-06-02 15:00:13.586 ServerApp]
-
-    To access the server, open this file in a browser:
-        file:///home/jovyan/.local/share/jupyter/runtime/jpserver-23-open.html
-    Or copy and paste one of these URLs:
-        http://tw015:<71xx>/tree?token=41748c2ad340ea87a568dd545986075082cf7d785f16787e
-        http://127.0.0.1:<71xx>/tree?token=41748c2ad340ea87a568dd545986075082cf7d785f16787e
-
+[I 2025-06-05 02:45:44.737 ServerApp] Jupyter Server 2.8.0 is running at:
+[I 2025-06-05 02:45:44.737 ServerApp] http://rocm-jupyter-gpu-mi300x1-192gb-devcloud-atl1:7100/tree?token=f41e3eaed66871280f3ae6d5679a4ad59a1583fec87d5523
+[I 2025-06-05 02:45:44.737 ServerApp]     http://127.0.0.1:7100/tree?token=f41e3eaed66871280f3ae6d5679a4ad59a1583fec87d5523
+[I 2025-06-05 02:45:44.737 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2025-06-05 02:45:44.738 ServerApp]
 ```
 
 Now follow steps in the `AAI25_workshop_ws_201.ipynb`
@@ -208,9 +137,8 @@ docker run -it --rm --network=host \
     --cap-add=SYS_PTRACE \
     --security-opt seccomp=unconfined \
     -e VLLM_USE_V1=1 \
-    -e HIP_VISIBLE_DEVICES=$GPU_ID \
     -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
-    -v /home/amd/models:/models  -v /home/amd/datasets:/datasets \
+    -v ./models:/models \
     rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
     vllm serve $model \
             --disable-log-requests \
@@ -240,9 +168,8 @@ docker run -it --rm --network=host \
     --cap-add=SYS_PTRACE \
     --security-opt seccomp=unconfined \
     -e VLLM_USE_V1=1 \
-    -e HIP_VISIBLE_DEVICES=$GPU_ID \
     -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
-    -v /home/amd/models:/models  -v /home/amd/datasets:/datasets \
+    -v ./models:/models \
     rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
     vllm serve $model \
             --disable-log-requests \
