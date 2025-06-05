@@ -7,7 +7,7 @@
 
 # BEFORE WE BEGIN
 
-In this workshop, we will run three vLLM servers and compare the caracteristics of each server. 
+In this workshop, we will run three different vLLM servers and compare their characteristics. 
 
 ![WORKSHOP_DESC](./assets/LLM_ws_201.jpg)
 
@@ -15,7 +15,7 @@ In this workshop, we will run three vLLM servers and compare the caracteristics 
 
  - 📌 IMPORTANT: Check out Digital Ocean Cloud Quick Start Guide at [digital ocean quick start](../Digital_Ocean_Usage/README.md)
 
-### Please use these to connect to your instace
+### Use the following ssh cmd to connect to your instance (Window:PowerShell, Linux or Mac:Terminal)
 
 ```
 ssh -L 7100:localhost:7100 -L 8100:localhost:8100 root@DIGITAL_OCEAN_INSTANCE_IP
@@ -30,11 +30,12 @@ export model=/models/Llama-3.1-8B-Instruct
 ## Case 1 vLLM v0 benchmarks
 -----------------------------
 
-Please down load LLAMA3.1 8B model from [RedHatAI/Llama-3.1-8B-Instruct](https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct) at ./models
+Please download LLAMA3.1 8B model from [RedHatAI/Llama-3.1-8B-Instruct](https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct) at ./models
 
 ```
 mkdir models
 cd models
+apt install git-lfs
 git-lfs clone https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct
 ```
 
@@ -69,7 +70,7 @@ INFO:     Application startup complete.
 
 ### CLIENT) Launch Jupyternotebook servers on the AMD host machine
 
-In an other terminal, now ssh again into the AMD host machine 
+Open a new terminal and connect to the AMD host machine using the ssh command below.
 
 ```
 ssh -L 7100:localhost:7100 -L 8100:localhost:8100 root@DIGITAL_OCEAN_INSTANCE_IP
@@ -82,7 +83,7 @@ export model=/models/Llama-3.1-8B-Instruct
 
 #### Launch Jupyter notebook container and access it via a web browser
 
-Launch this Jupyter notebook container
+Launch the following Jupyter notebook container
 
 ```
 docker run -it --rm -u root --entrypoint /bin/bash --net host \
@@ -123,9 +124,9 @@ Now follow steps in the `AAI25_workshop_ws_201.ipynb`
 ## Case 2 vLLM v1 benchmarks
 -----------------------------
 
-Now close the previous vLLM server by `ctrl+C` and launch a new vLLM server with v1 enabled
-Chekc out `VLLM_USE_V1=1` env var to grigger v1. 
-And follow instructions at `AAI25_workshop_ws_201.ipynb`
+Now stop the previous vLLM server by pressing 'Ctrl+C', and launch a new vLLM server with v1 enabled.
+Make sure to set the environment variable 'VLLM_USE_V1=1' to activate v1 mode.
+Then, follow the instructions in the 'AAI25_workshop_ws_201.ipynb' notebook. 
 
 ### SERVER) vLLM v1 without prefix-caching
 
@@ -155,8 +156,8 @@ docker run -it --rm --network=host \
 ## Case 3 vLLM v1 with Prefix-caching benchmarks
 -----------------------------
 
-Now close the previous vLLM server by `ctrl+C` and launch a new vLLM server with v1 and prefix cache are enabled
-Chekc out `VLLM_USE_V1=1` env var to grigger v1 and `--enable-prefix-caching` vllm arg to enabled prefix caching. 
+Now stop the previous vLLM server by pressing 'Ctrl+C', and start a new one with both v1 and prefix caching enabled.
+Set the environment variable 'VLLM_USE_V1=1' to enable v1, and pass the '--enable-prefix-caching' argument when launching the vLLM server to activate prefix caching.
 
 ### SERVER) vLLM v1 with prefix-caching
 
