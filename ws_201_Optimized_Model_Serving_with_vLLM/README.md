@@ -86,7 +86,7 @@ Launch this Jupyter notebook container
 
 ```
 docker run -it --rm -u root --entrypoint /bin/bash --net host \
-    -v $(pwd):/workspace -v /home/amd/models:/models  -v /home/amd/datasets:/datasets \
+    -v $(pwd):/workspace -v /root/models:/models \
     -e PORT_JUPYTER=$PORT_JUPYTER \
     jupyter/base-notebook
 
