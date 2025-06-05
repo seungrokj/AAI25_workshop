@@ -49,7 +49,7 @@ docker run -it --rm --network=host \
     --security-opt seccomp=unconfined \
     -e VLLM_USE_V1=0 \
     -e VLLM_USE_TRITON_FLASH_ATTN=0 \
-    -v ./models:/models \
+    -v /root/models:/models \
     rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
     vllm serve $model \
             --disable-log-requests \
@@ -138,7 +138,7 @@ docker run -it --rm --network=host \
     --security-opt seccomp=unconfined \
     -e VLLM_USE_V1=1 \
     -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
-    -v ./models:/models \
+    -v /root/models:/models \
     rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
     vllm serve $model \
             --disable-log-requests \
@@ -169,7 +169,7 @@ docker run -it --rm --network=host \
     --security-opt seccomp=unconfined \
     -e VLLM_USE_V1=1 \
     -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
-    -v ./models:/models \
+    -v /root/models:/models \
     rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
     vllm serve $model \
             --disable-log-requests \
