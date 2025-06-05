@@ -98,7 +98,7 @@ apt update
 apt install git -y
 cd /workspace
 git clone https://github.com/seungrokj/AAI25_workshop
-cd aai25_workshop/ws_201_Optimized_Model_Serving_with_vLLM
+cd AAI25_workshop/ws_201_Optimized_Model_Serving_with_vLLM
 ```
 
 Launch the Jupyter notebook
