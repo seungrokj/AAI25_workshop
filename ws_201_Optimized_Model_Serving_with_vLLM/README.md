@@ -1,9 +1,9 @@
 # Table of content
 
 0. [BEFORE WE BEGIN](#before-we-begin)
-    1. [Case 1 vLLM v0 benchmarks](#case-1-vllm-v0-benchmarks)
-    2. [Case 2 vLLM v1 benchmarks](#case-2-vllm-v1-benchmarks)
-    3. [Case 3 vLLM v1 with Prefix-caching benchmarks](#case-3-vllm-v1-with-prefix-caching-benchmarks)
+1. [Case 1 vLLM v0 benchmarks](#case-1-vllm-v0-benchmarks)
+2. [Case 2 vLLM v1 benchmarks](#case-2-vllm-v1-benchmarks)
+3. [Case 3 vLLM v1 with Prefix-caching benchmarks](#case-3-vllm-v1-with-prefix-caching-benchmarks)
 
 # BEFORE WE BEGIN
 
