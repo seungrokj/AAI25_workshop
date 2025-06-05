@@ -13,13 +13,13 @@
 
 ## ⭐
 ![DO_3](./assets/DO_3.jpg)
-- Please add TAGS with your name to easily identify your instnace
+- Please add TAGs with your name to easily identify your instance
 - Check out SSH IP
 - And Click "Networking" to add additional PORTs to the instance
 
 ## ⭐
 ![DO_4](./assets/DO_4.jpg)
-- Add service PORTS, e.g. 7100 and 8100 for ws201
+- Add service PORTs, e.g. 7100 and 8100 for ws201
 
 ## ⭐
 ![DO_5](./assets/DO_5.jpg)
