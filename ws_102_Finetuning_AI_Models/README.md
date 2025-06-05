@@ -1,8 +1,8 @@
 # Table of content
 
 0. [BEFORE WE BEGIN](#before-we-begin)
-1. [Fine-tuning Qwen vision with LoRA tech on AMD GPU](#case-1-vllm-v0-benchmarks)
-2. [Fine-tuning LLaMa3.2 1B with torchtune](#case-2-vllm-v1-benchmarks)
+1. [Learning Domain Knowledge to Make Qwen-Vision Smarter with LoRA on AMD GPU](#case-1-vllm-v0-benchmarks)
+2. [Adding Reason Capability into LLaMa-Vision with Torchtune](#case-2-vllm-v1-benchmarks)
 
 # BEFORE WE BEGIN
 
@@ -57,4 +57,7 @@ cd /root && git clone https://github.com/seungrokj/AAI25_workshop.git && cd AAI2
 jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
 ```
 
-### Open your browser (e.g. Edge, Chrome, Opera..) and type in the http://<YOUR_DIGITAL_OCEAN_INSTANCE_IP>:8888/lab?token=<YOUR_JUPYTER_NOTEBOOK_TOKEN>
+### Open your browser (e.g. Edge, Chrome, Opera..) and type in the 
+```bash
+http://<YOUR_DIGITAL_OCEAN_INSTANCE_IP>:8888/lab?token=<YOUR_JUPYTER_NOTEBOOK_TOKEN>
+```
