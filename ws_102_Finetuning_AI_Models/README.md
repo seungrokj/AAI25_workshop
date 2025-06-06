@@ -1,8 +1,7 @@
 # Table of content
 
 0. [BEFORE WE BEGIN](#before-we-begin)
-1. [Learning Domain Knowledge to Make Qwen-Vision Smarter with LoRA on AMD GPU](https://github.com/seungrokj/AAI25_workshop/blob/main/ws_102_Finetuning_AI_Models/fine_tuning_lora_qwen2vl.ipynb)
-2. [Adding Reason Capability into LLaMa-Vision with Torchtune](https://github.com/seungrokj/AAI25_workshop/blob/main/ws_102_Finetuning_AI_Models/fine_tuning_llama3_2_11b_90b_vision_onreasoning_dataset.ipynb)
+1. [Adding Reason Capability into LLaMa-Vision with Torchtune](https://github.com/seungrokj/AAI25_workshop/blob/main/ws_102_Finetuning_AI_Models/fine_tuning_llama3_2_11b_90b_vision_onreasoning_dataset.ipynb)
 
 # BEFORE WE BEGIN
 
