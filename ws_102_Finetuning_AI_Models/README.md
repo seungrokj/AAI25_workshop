@@ -1,62 +1,41 @@
-# Table of content
-
-0. [BEFORE WE BEGIN](#before-we-begin)
-1. [Adding Reason Capability into LLaMa-Vision with Torchtune](https://github.com/seungrokj/AAI25_workshop/blob/main/ws_102_Finetuning_AI_Models/fine_tuning_llama3_2_11b_90b_vision_onreasoning_dataset.ipynb)
-
-# BEFORE WE BEGIN
-
-In this workshop, we will run two fine-tuning examples to show the power of fine-tuning.
+# WORKSHOP 102 Fine-tuning LLaMA 3.2 11B and 90B vision model with LoRA and qLoRA technique on MI300X single gpu
 
 
-## Connecting to Digital Ocean Cloud Instance
+## How to start: 
 
- - 📌 IMPORTANT: Check out Digital Ocean Cloud Quick Start Guide at [digital ocean quick start](../Digital_Ocean_Usage/README.md)
+### Create a Single vLLM MI300X GPU Droplet
+Start by creating a Digital Ocean Droplet. Choose the PyTorch droplet shown below.
 
-### Use the following ssh cmd to connect to your instance (Window:PowerShell, Linux or Mac:Terminal)
+![droplet](image.png)
+![pytorch-droplets](image.png)
 
-```
-ssh root@<YOUR_DIGITAL_OCEAN_INSTANCE_IP>
+Then add your ssh key and create a single GPU image.
 
-# Inside the host machine
+### Retrieve Jupyter Server Address + Token
 
-CONTAINER_NAME=AAI25-finetune-workshop
-IMAGE_NAME=rocm/pytorch-training:v25.4
+Once the image is created you can either ssh to your VM or use the `Web Console` button to enter the VM. Once you are in the VM you should see your jupyter server credentials printed for you as shown below:
 
-docker run -it \
-        --device /dev/dri \
-        --device /dev/kfd \
-        --ipc host \
-        -p 8888:8888 \
-        --group-add video \
-        --cap-add SYS_PTRACE \
-        --security-opt seccomp=unconfined \
-        --privileged \
-        --env HUGGINGFACE_HUB_CACHE=/root/models\
-        --env MODELSCOPE_CACHE=/root/models\
-        -v /root:/root \
-        --workdir /root \
-        --shm-size 32G \
-        --name ${CONTAINER_NAME} \
-        ${IMAGE_NAME} /bin/bash
+![terminal](./assets/workshop_images2.png)
 
-```
+Enter the URL in your browser. Then copy the token in the first box where it prompts you for the token.
 
-### Pre-download the related model ckpt by 
+***IMPORTANT NOTE** Please make sure the URL starts with `http` rather than `https` as the later is not reachable.
+
+
+### Download the workshop notebook into specific folder and execute
 
 ```bash
+# enter the container environment
+docker exec -it rocm /bin/bash
 
-huggingface-cli download --token <YOUR_HUGGINGFACE_KEY> --resume-download Qwen/Qwen2-VL-7B-Instruct
+# enter the default jupyter folder
+cd /home/rocm-user/jupyter
+
+# git clone the repo
+git clone --recursive https://github.com/seungrokj/AAI25_workshop/
+
 ```
 
+![jupyter](./assets/workshop_images3png.png)
 
-### Install Jupyter notebook server and launch it by 
-```bash
-pip install jupyter
-cd /root && git clone https://github.com/seungrokj/AAI25_workshop.git && cd AAI25_workshop/ws_102_Finetuning_AI_Models
-jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
-```
-
-### Open your browser (e.g. Edge, Chrome, Opera..) and type in the 
-```bash
-http://<YOUR_DIGITAL_OCEAN_INSTANCE_IP>:8888/lab?token=<YOUR_JUPYTER_NOTEBOOK_TOKEN>
-```
+Once your notebook is loaded you are ready to go. Follow the instructions in the notebook after that.

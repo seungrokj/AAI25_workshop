@@ -1,0 +1,60 @@
+# Config for running the InferenceRecipe in dev/generate_v2.py to generate output
+# from a Llama3.2 11B Vision Instruct model
+#
+# This config assumes that you've run the following command before launching:
+#  tune download meta-llama/Llama-3.2-90B-Vision-Instruct --output-dir /tmp/Llama-3.2-90B-Vision-Instruct --ignore-patterns "original/consolidated*"
+#
+# To launch, run the following command from root torchtune directory:
+#    tune run dev/generate_v2 --config llama3_2_vision/90B_generation_v2.yaml
+
+output_dir: ./
+
+# Model arguments
+model:
+  _component_: torchtune.models.llama3_2_vision.llama3_2_vision_90b
+
+# Transform arguments
+tokenizer:
+  _component_: torchtune.models.llama3_2_vision.llama3_2_vision_transform
+  path: /tmp/Llama-3.2-90B-Vision-Instruct/original/tokenizer.model
+  prompt_template: null
+  max_seq_len: 8192
+
+# Checkpointer
+checkpointer:
+  _component_: torchtune.training.FullModelHFCheckpointer
+  checkpoint_dir: /tmp/Llama-3.2-90B-Vision-Instruct/
+  checkpoint_files:
+    filename_format: model-{}-of-{}.safetensors
+    max_filename: "00037"
+  output_dir: ${output_dir}
+  model_type: LLAMA3_VISION
+
+# Device
+device: cuda
+dtype: bf16
+seed: 1234
+log_level: INFO  # DEBUG, WARN, etc.
+
+# Generation arguments
+prompt:
+  system: |
+      <image>{{query}}
+      Analyze the image and question carefully, using step-by-step reasoning.
+      First, describe any image provided in detail. Then, present your reasoning. And finally your final answer in this format:
+      Final Answer: <answer>
+      where <answer> follows the following instructions:
+      - <answer> should should be a single phrase or number.
+      - <answer> should not paraphrase or reformat the text in the image.
+      - If <answer> is a ratio, it should be a decimal value like 0.25 instead of 1:4.
+      - If the question is a Yes/No question, <answer> should be Yes/No.
+      - If <answer> is a number, it should not contain any units.
+      - If <answer> is a percentage, it should include a % sign.
+      - If <answer> is an entity, it should include the full label from the graph.
+      IMPORTANT: Remember, to end your answer with Final Answer: <answer>.
+  user:
+    image: example_chart.png
+    text: Is the value of Favorable 38 in 2015?
+max_new_tokens: 200
+temperature: 0.0 # 0.8 and 0.6 are popular values to try
+top_k: 1
