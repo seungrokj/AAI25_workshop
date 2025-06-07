@@ -15,7 +15,7 @@
 # For single device LoRA finetuning please use 11B_lora_single_device.yaml
 # or 11B_qlora_single_device.yaml
 
-output_dir: /tmp/torchtune/llama3_2_vision_11B/lora # /tmp may be deleted by your system. Change it to your preference.
+output_dir: ./checkpoints/llama3_2_vision_11B/lora # /tmp may be deleted by your system. Change it to your preference.
 
 # Model arguments
 model:

@@ -13,7 +13,8 @@
 #
 # This config works best when the model is being fine-tuned on 4+ GPUs.
 
-output_dir: /tmp/torchtune/llama3_2_vision_90B/qlora # /tmp may be deleted by your system. Change it to your preference.
+output_dir: ./checkpoints/llama3_2_vision_90B/qlora # /tmp may be deleted by your system. Change it to your preference.
+
 
 # Model arguments
 model:
