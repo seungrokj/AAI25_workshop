@@ -53,7 +53,7 @@ save_adapter_weights_only: False # PeFT formatting not available yet. This will 
 # Dataset
 dataset:
   _component_: torchtune.datasets.multimodal.vqa_dataset
-  source: "cot_ds/cot_chartqa/"
+  source: "cot_chartqa/"
   packed: False
   column_map: {"input":"query", "image":"image", "output":"label"}
 seed: 42
