@@ -6,8 +6,8 @@
 ### Create a Single vLLM MI300X GPU Droplet
 Start by creating a Digital Ocean Droplet. Choose the PyTorch droplet shown below.
 
-![droplet](image.png)
-![pytorch-droplets](image.png)
+![droplet](./assets/droplets.png)
+![pytorch-droplets](./assets/pytorch-droplets.png)
 
 Then add your ssh key and create a single GPU image.
 
