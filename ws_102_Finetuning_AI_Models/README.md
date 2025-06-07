@@ -36,6 +36,6 @@ git clone --recursive https://github.com/seungrokj/AAI25_workshop/
 
 ```
 
-![jupyter](./assets/workshop_images3png.png)
+![jupyter-outline](./assets/jupyter-outline.png)
 
 Once your notebook is loaded you are ready to go. Follow the instructions in the notebook after that.
