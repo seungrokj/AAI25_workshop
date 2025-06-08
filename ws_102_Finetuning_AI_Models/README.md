@@ -29,7 +29,7 @@ Enter the URL in your browser. Then copy the token in the first box where it pro
 docker exec -it rocm /bin/bash
 
 # enter the default jupyter folder
-cd /home/rocm-user/jupyter
+cd /var/lib/jenkins/jupyter
 
 # git clone the repo
 git clone --recursive https://github.com/seungrokj/AAI25_workshop/
