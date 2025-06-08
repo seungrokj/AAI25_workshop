@@ -1,184 +1,31 @@
 # Table of content
 
-0. [BEFORE WE BEGIN](#before-we-begin)
-1. [Case 1 vLLM v0 benchmarks](#case-1-vllm-v0-benchmarks)
-2. [Case 2 vLLM v1 benchmarks](#case-2-vllm-v1-benchmarks)
-3. [Case 3 vLLM v1 with Prefix-caching benchmarks](#case-3-vllm-v1-with-prefix-caching-benchmarks)
+## How to start: 
 
-# BEFORE WE BEGIN
+### Create a Single vLLM MI300X GPU Droplet
+Start by creating a Digital Ocean Droplet. Choose the vLLM droplet shown below.
 
-In this workshop, we will run three different vLLM servers and compare their characteristics.
+![droplet](./assets/workshop_images1.png)
 
-![WORKSHOP_DESC](./assets/LLM_ws_201.jpg)
 
-## Connecting to Digital Ocean Cloud Instance
+Then add your ssh key and create a single GPU image.
 
- - 📌 IMPORTANT: Check out Digital Ocean Cloud Quick Start Guide at [digital ocean quick start](../Digital_Ocean_Usage/README.md)
+### Retrieve Jupyter Server Address + Token
 
-### Use the following ssh cmd to connect to your instance (Window:PowerShell, Linux or Mac:Terminal)
+Once the image is created you can either ssh to your VM or use the `Web Console` button to enter the VM. Once you are in the VM you should see your jupyter server credentials printed for you as shown below:
 
-```
-ssh -L 7100:localhost:7100 -L 8100:localhost:8100 root@DIGITAL_OCEAN_INSTANCE_IP
+![terminal](./assets/workshop_images2.png)
 
-# Inside the host machine
-export PORT_VLLM=8100
-export PORT_JUPYTER=7100
-export model=/models/Llama-3.1-8B-Instruct
-```
+Enter the URL in your browser. Then copy the token in the first box where it prompts you for the token.
 
-## ✨ 
-## Case 1 vLLM v0 benchmarks
------------------------------
+***IMPORTANT NOTE** Please make sure the URL starts with `http` rather than `https` as the later is not reachable.
 
-Please download LLAMA3.1 8B model from [RedHatAI/Llama-3.1-8B-Instruct](https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct) at ./models
 
-```
-mkdir models
-cd models
-apt install git-lfs
-git-lfs clone https://huggingface.co/RedHatAI/Llama-3.1-8B-Instruct
-```
+### Upload the workshop notebook and execute
 
-### SERVER) vLLM v0 default option
+Now just download the notebook [here](./openmanus_workshop.ipynb) and upload in your notebook as shown below.
 
-```
-docker run -it --rm --network=host \
-    --device=/dev/kfd --device=/dev/dri \
-    --ipc=host --shm-size 16G \
-    --group-add video \
-    --cap-add=SYS_PTRACE \
-    --security-opt seccomp=unconfined \
-    -e VLLM_USE_V1=0 \
-    -e VLLM_USE_TRITON_FLASH_ATTN=0 \
-    -v /root/models:/models \
-    rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
-    vllm serve $model \
-            --disable-log-requests \
-            --trust-remote-code -tp 1 \
-            --cuda-graph-sizes 64 \
-            --chat-template /app/vllm/examples/tool_chat_template_llama3.1_json.jinja \
-            --port $PORT_VLLM
-```
 
-Once servers are ready, you can see these logs in the terminal
+![jupyter](./assets/workshop_images3png.png)
 
-```
-INFO:     Started server process [1]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-```
-
-### CLIENT) Launch Jupyternotebook servers on the AMD host machine
-
-Open a new terminal and connect to the AMD host machine using the ssh command below
-
-```
-ssh -L 7100:localhost:7100 -L 8100:localhost:8100 root@DIGITAL_OCEAN_INSTANCE_IP
-
-# Inside the host machine
-export PORT_VLLM=8100
-export PORT_JUPYTER=7100
-export model=/models/Llama-3.1-8B-Instruct
-```
-
-#### Launch Jupyter notebook container and access it via a web browser
-
-Launch the following Jupyter notebook container
-
-```
-docker run -it --rm -u root --entrypoint /bin/bash --net host \
-    -v $(pwd):/workspace -v /root/models:/models \
-    -e PORT_JUPYTER=$PORT_JUPYTER \
-    jupyter/base-notebook
-
-```
-
-Inside the container, please clone this workshop repo
-```
-apt update
-apt install git -y
-cd /workspace
-git clone https://github.com/seungrokj/AAI25_workshop
-cd AAI25_workshop/ws_201_Optimized_Model_Serving_with_vLLM
-```
-
-Launch the Jupyter notebook
-
-```
-jupyter-notebook --allow-root --port $PORT_JUPYTER
-```
-
-You can access the Jupyter notebook server that starts with http:/127.0.0.1:<7100> below
-
-```
-[I 2025-06-05 02:45:44.737 ServerApp] Jupyter Server 2.8.0 is running at:
-[I 2025-06-05 02:45:44.737 ServerApp] http://rocm-jupyter-gpu-mi300x1-192gb-devcloud-atl1:7100/tree?token=f41e3eaed66871280f3ae6d5679a4ad59a1583fec87d5523
-[I 2025-06-05 02:45:44.737 ServerApp]     http://127.0.0.1:7100/tree?token=f41e3eaed66871280f3ae6d5679a4ad59a1583fec87d5523
-[I 2025-06-05 02:45:44.737 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
-[C 2025-06-05 02:45:44.738 ServerApp]
-```
-
-Now follow steps in the `AAI25_workshop_ws_201.ipynb`
-
-## ✨ 
-## Case 2 vLLM v1 benchmarks
------------------------------
-
-Now stop the previous vLLM server by pressing 'Ctrl+C', and launch a new vLLM server with v1 enabled.
-Make sure to set the environment variable 'VLLM_USE_V1=1' to activate v1 mode.
-Then, follow the instructions in the 'AAI25_workshop_ws_201.ipynb' notebook. 
-
-### SERVER) vLLM v1 without prefix-caching
-
-```
-docker run -it --rm --network=host \
-    --device=/dev/kfd --device=/dev/dri \
-    --ipc=host --shm-size 16G \
-    --group-add video \
-    --cap-add=SYS_PTRACE \
-    --security-opt seccomp=unconfined \
-    -e VLLM_USE_V1=1 \
-    -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
-    -v /root/models:/models \
-    rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
-    vllm serve $model \
-            --disable-log-requests \
-            --trust-remote-code -tp 1 \
-            --cuda-graph-sizes 64 \
-            --no-enable-prefix-caching \
-            --chat-template /app/vllm/examples/tool_chat_template_llama3.1_json.jinja \
-            --port $PORT_VLLM
-```
-
-### CLIENT) Keep following instructions at `AAI25_workshop_ws_201.ipynb`
-
-## ✨ 
-## Case 3 vLLM v1 with Prefix-caching benchmarks
------------------------------
-
-Now stop the previous vLLM server by pressing 'Ctrl+C', and start a new one with both v1 and prefix caching enabled.
-Set the environment variable 'VLLM_USE_V1=1' to enable v1, and pass the '--enable-prefix-caching' argument when launching the vLLM server to activate prefix caching. 
-
-### SERVER) vLLM v1 with prefix-caching
-
-```
-docker run -it --rm --network=host \
-    --device=/dev/kfd --device=/dev/dri \
-    --ipc=host --shm-size 16G \
-    --group-add video \
-    --cap-add=SYS_PTRACE \
-    --security-opt seccomp=unconfined \
-    -e VLLM_USE_V1=1 \
-    -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
-    -v /root/models:/models \
-    rocm/vllm-dev:nightly_610_rc1_6.4.1_6_10_rc1_20250529 \
-    vllm serve $model \
-            --disable-log-requests \
-            --trust-remote-code -tp 1 \
-            --cuda-graph-sizes 64 \
-            --enable-prefix-caching \
-            --chat-template /app/vllm/examples/tool_chat_template_llama3.1_json.jinja \
-            --port $PORT_VLLM
-```
-
-### CLIENT) Keep following instructions at `AAI25_workshop_ws_201.ipynb`
+Once your notebook is loaded you are ready to go. Follow the instructions in the notebook after that.
