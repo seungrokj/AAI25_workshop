@@ -23,7 +23,7 @@ Enter the URL in your browser. Then copy the token in the first box where it pro
 
 ### Upload the workshop notebook and execute
 
-Now just download the notebook [here](./openmanus_workshop.ipynb) and upload in your notebook as shown below.
+Now just download the notebook [here](./CLIENT_ws_201.ipynb) and [here](./SERVER_ws_201.ipynb) upload in your notebook as shown below.
 
 
 ![jupyter](./assets/workshop_images3png.png)
