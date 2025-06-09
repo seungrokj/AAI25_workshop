@@ -21,11 +21,13 @@ Enter the URL in your browser. Then copy the token in the first box where it pro
 ***IMPORTANT NOTE** Please make sure the URL starts with `http` rather than `https` as the later is not reachable.
 
 
-### Upload the workshop notebook and execute
+### Prepare Jupyter Notebook tutorials
 
-Now just download the notebook [here](./CLIENT_ws_201.ipynb) and [here](./SERVER_ws_201.ipynb) upload in your notebook as shown below.
+Once your notebook is loaded,
 
+Launch Terminal and type these to downaload Jupyter Notebook and Open (CLIENT_ws_201.ipynb)
 
-![jupyter](./assets/workshop_images3png.png)
-
-Once your notebook is loaded you are ready to go. Follow the instructions in the notebook after that.
+```sh
+wget https://github.com/seungrokj/AAI25_workshop/blob/main/ws_201_Optimized_Model_Serving_with_vLLM/CLIENT_ws_201.ipynb /app/jupyter/
+wget https://github.com/seungrokj/AAI25_workshop/blob/main/ws_201_Optimized_Model_Serving_with_vLLM/rpt_sum.sh /app/jupyter/
+```
