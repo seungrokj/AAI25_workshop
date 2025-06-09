@@ -43,7 +43,7 @@ log_level: INFO  # DEBUG, WARN, etc.
 # Eval Harness so results may not match the paper OOTB
 # tasks: ["mmmu_val_science"] # Defaulting to science as a good subset
 tasks: ["chartqa"] # Defaulting to science as a good subset
-limit: 10
+limit: 2500
 batch_size: 1
 enable_kv_cache: True
 max_seq_length: 8192
