@@ -33,7 +33,6 @@ cp CLIENT_ws_201.ipynb /app/jupyter/
 cp rpt_sum.sh /app/jupyter
 ```
 
-Double cloick CLIENT_ws_201.ipynb and now let's begin
+Double click CLIENT_ws_201.ipynb and now let's begin
 
-
-
+![display](./assets/display_layout.jpg)
