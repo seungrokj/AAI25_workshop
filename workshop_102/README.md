@@ -1,3 +1,4 @@
+# This DOC is only compatible before the commit `c2dac2e6b13054e0e8acc44a4aac322519af32d5` and will be deprecated soon.
 # WORKSHOP 102 Fine-tuning LLaMA 3.2 11B and 90B vision model with LoRA and qLoRA technique on MI300X single gpu
 
 
