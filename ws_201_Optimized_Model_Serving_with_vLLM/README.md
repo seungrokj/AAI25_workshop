@@ -25,9 +25,15 @@ Enter the URL in your browser. Then copy the token in the first box where it pro
 
 Once your notebook is loaded,
 
-Launch Terminal and type these to downaload Jupyter Notebook and Open (CLIENT_ws_201.ipynb)
-
+Launch Terminal and type these to downaload Jupyter Notebook 
 ```sh
-wget https://github.com/seungrokj/AAI25_workshop/blob/main/ws_201_Optimized_Model_Serving_with_vLLM/CLIENT_ws_201.ipynb /app/jupyter/
-wget https://github.com/seungrokj/AAI25_workshop/blob/main/ws_201_Optimized_Model_Serving_with_vLLM/rpt_sum.sh /app/jupyter/
+git clone https://github.com/seungrokj/AAI25_workshop.git
+cd AAI25_workshop/ws_201_Optimized_Model_Serving_with_vLLM
+cp CLIENT_ws_201.ipynb /app/jupyter/
+cp rpt_sum.sh /app/jupyter
 ```
+
+Double cloick CLIENT_ws_201.ipynb and now let's begin
+
+
+
