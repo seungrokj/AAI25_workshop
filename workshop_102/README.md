@@ -5,20 +5,15 @@
 ## How to start: 
 
 ### Create a Single vLLM MI300X GPU Droplet
-Start by creating a Digital Ocean Droplet. Choose the PyTorch droplet shown below.
+Start by creating a Digital Ocean Droplet. Choose the AAI snapshot shown below.
 
 ![droplet](./assets/droplets.png)
-![pytorch-droplets](./assets/pytorch-droplets.png)
 
 Then add your ssh key and create a single GPU image.
 
-### Retrieve Jupyter Server Address + Token
+### Open jupyter notebook in your browser
 
-Once the image is created you can either ssh to your VM or use the `Web Console` button to enter the VM. Once you are in the VM you should see your jupyter server credentials printed for you as shown below:
-
-![terminal](./assets/workshop_images2.png)
-
-Enter the URL in your browser. Then copy the token in the first box where it prompts you for the token.
+Enter the URL in your browser. Then add 8102 as the port. Finally we should fill in `AAI25` as the token
 
 ***IMPORTANT NOTE** Please make sure the URL starts with `http` rather than `https` as the later is not reachable.
 
